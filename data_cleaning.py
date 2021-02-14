@@ -31,7 +31,9 @@ def preprocess(file_location):
     
     for i in range(len(d[0])-1):
         data[str(i)]=data[str(i)].astype('float64')
-    
+	
+    ''' Label encoding ' positive' and ' negative' to 1,0 '''
+
     le=preprocessing.LabelEncoder()
 	
     data[str(len(d[0])-1)]=le.fit_transform(data[str(len(d[0])-1)])
