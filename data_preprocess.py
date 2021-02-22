@@ -63,7 +63,7 @@ def seq_gen(data, mj=0, mn=1):
     #print(seq.shape)
     
     for i in range(seq_len):
-        seq[i,0:batch_size]=data_mj[i:i+batch_size]
+        seq[i,0:batch_size]=data_mj[(i*batch_size):( (i*batch_size)+batch_size)]
         seq[i,batch_size:2*batch_size]=data_mn
         
     return seq#torch.from_numpy(seq).float()
