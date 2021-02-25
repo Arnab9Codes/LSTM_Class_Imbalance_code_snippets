@@ -9,34 +9,41 @@ import torch
 import os
 from sklearn import preprocessing
 
-def clean(file_location):
+def clean(file_location):   
     '''
-    input: 
-        file_location: location of the .dat file
-    output:
-        dataframe cotaining cleaned data
-    '''
-    d=[]
-    ''' here getting rid of extra descriptions line that all start with @
-        see the .dat file to understand details
+        input: takes file_location
+        output: dataframe of cleaned data
     '''
     
+    d=[]
+       
     for i in open(file_location).readlines():
         if i[0]!='@':
             d.append(i.rstrip('\n').split(','))
-    
+
+    types={} # holds the datatypes required
+
+    for i in range(len(d[0])):
+        if re.search('[0-9]',d[0][i]):
+
+            types[str(i)]=float
+        else:
+            types[str(i)]=str
+
+
     data=pd.DataFrame(d, columns=[str(i) for i in range(len(d[0]))])
+    data=data.astype(types)
     
-    ''' making string values numeric, except for the class type, initially all were Object type'''
+    # label encoding str type columns
+
+    le=preprocessing.LabelEncoder() 
+
+    for i in range(len(data.columns)):
+        if isinstance(data[str(i)][0],str):
+            data[str(i)]=le.fit_transform(data[str(i)])
     
-    for i in range(len(d[0])-1):
-        data[str(i)]=data[str(i)].astype('float64')
-    
-    le=preprocessing.LabelEncoder()
-	
-    data[str(len(d[0])-1)]=le.fit_transform(data[str(len(d[0])-1)])
-	
     return data
+
 
 	
 def seq_gen(data, mj=0, mn=1):
