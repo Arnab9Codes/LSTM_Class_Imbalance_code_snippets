@@ -8,6 +8,7 @@ import pandas as pd
 import torch
 import os
 from sklearn import preprocessing
+import re
 
 def clean(file_location):   
     '''
